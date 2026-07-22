@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SorriAqua — Painel de Administração</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    --orange:#F07840; --orange-lt:#F5976A; --teal:#3CC8BE; --teal-dk:#2AA89F; --teal-lt:#D0F4F1;
+    --navy:#0D1B3E; --white:#FFFFFF; --bg:#F2FBFF; --bg2:#E8F8F6; --text:#1A3050; --muted:#5C7A94;
+    --border:rgba(60,200,190,0.25); --danger:#D9534F;
+  }
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.5;min-height:100vh;}
+  a{color:var(--teal-dk);}
+  button{font-family:inherit;cursor:pointer;}
+  input,select,textarea{font-family:inherit;font-size:.85rem;padding:9px 11px;border:1.5px solid var(--border);border-radius:5px;background:var(--white);color:var(--text);outline:none;}
+  input:focus,select:focus,textarea:focus{border-color:var(--teal);}
+
+  /* ── LOGIN ── */
+  #loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+  .login-card{background:var(--white);border-radius:12px;box-shadow:0 20px 60px rgba(13,27,62,.12);padding:44px 40px;width:100%;max-width:380px;}
+  .login-card h1{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--navy);margin-bottom:6px;}
+  .login-card p.sub{font-size:.82rem;color:var(--muted);margin-bottom:28px;}
+  .field{margin-bottom:16px;}
+  .field label{display:block;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+  .field input{width:100%;}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:5px;padding:11px 18px;font-size:.82rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;transition:background .2s,transform .2s;}
+  .btn-primary{background:var(--orange);color:#fff;width:100%;}
+  .btn-primary:hover{background:var(--orange-lt);}
+  .btn-secondary{background:var(--bg2);color:var(--teal-dk);}
+  .btn-secondary:hover{background:var(--teal-lt);}
+  .btn-danger{background:rgba(217,83,79,.1);color:var(--danger);}
+  .btn-danger:hover{background:rgba(217,83,79,.18);}
+  .btn-icon{background:none;border:1px solid var(--border);color:var(--muted);width:30px;height:30px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;padding:0;font-size:1rem;line-height:1;}
+  .btn-icon:hover{border-color:var(--teal);color:var(--teal-dk);}
+  .error-msg{background:rgba(217,83,79,.08);border:1px solid rgba(217,83,79,.3);color:var(--danger);font-size:.8rem;padding:10px 12px;border-radius:5px;margin-bottom:16px;display:none;}
+  .error-msg.show{display:block;}
+
+  /* ── APP SHELL ── */
+  #appScreen{display:none;min-height:100vh;flex-direction:column;}
+  header.topbar{background:var(--white);border-bottom:1px solid var(--border);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;}
+  .topbar-brand{display:flex;align-items:center;gap:12px;}
+  .topbar-brand img{width:38px;height:38px;border-radius:7px;object-fit:cover;}
+  .topbar-brand span{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--navy);}
+  .topbar-brand small{display:block;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--orange);}
+  .topbar-actions{display:flex;gap:10px;align-items:center;}
+  .topbar-actions a{font-size:.78rem;color:var(--muted);text-decoration:none;font-weight:600;}
+
+  .tabs-row{display:flex;gap:6px;padding:18px 28px 0;background:var(--white);border-bottom:1px solid var(--border);}
+  .maintab-btn{background:none;border:none;padding:12px 18px;font-size:.82rem;font-weight:700;color:var(--muted);border-bottom:2px solid transparent;text-transform:uppercase;letter-spacing:.04em;}
+  .maintab-btn.active{color:var(--navy);border-bottom-color:var(--orange);}
+
+  main{flex:1;padding:28px;max-width:1100px;width:100%;margin:0 auto;}
+  .panel{display:none;}
+  .panel.active{display:block;}
+
+  .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;gap:12px;flex-wrap:wrap;}
+  .toolbar h2{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--navy);}
+  .cat-filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;}
+  .cat-filter button{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:7px 16px;font-size:.76rem;font-weight:600;color:var(--muted);}
+  .cat-filter button.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+
+  .group-block{margin-bottom:28px;}
+  .group-title{font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-dk);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+
+  .item-row{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:10px;display:flex;gap:14px;align-items:flex-start;}
+  .item-row.inactive{opacity:.5;}
+  .item-thumb{width:56px;height:56px;border-radius:6px;object-fit:contain;background:var(--bg2);flex-shrink:0;}
+  .item-body{flex:1;min-width:0;}
+  .item-row-top{display:flex;gap:10px;align-items:center;margin-bottom:8px;flex-wrap:wrap;}
+  .item-row-top input[type=text]{flex:1;min-width:160px;font-weight:600;}
+  .item-fields{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
+  .item-fields select, .item-fields input{font-size:.78rem;padding:7px 9px;}
+  .item-desc{width:100%;min-height:50px;resize:vertical;font-size:.8rem;margin-bottom:8px;}
+  .variants-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;}
+  .variant-tag{display:flex;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:4px 6px 4px 12px;font-size:.76rem;}
+  .variant-tag button{background:none;border:none;color:var(--muted);font-size:.9rem;width:18px;height:18px;border-radius:50%;}
+  .variant-tag button:hover{background:rgba(217,83,79,.15);color:var(--danger);}
+  .add-variant-inline{display:flex;gap:6px;align-items:center;}
+  .add-variant-inline input{width:110px;font-size:.76rem;padding:5px 8px;}
+  .item-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+  .item-actions label{display:flex;align-items:center;gap:5px;font-size:.74rem;color:var(--muted);}
+  .move-btns{display:flex;flex-direction:column;gap:3px;}
+  .move-btns button{width:26px;height:22px;font-size:.7rem;}
+
+  .new-item-form{background:var(--bg2);border:1.5px dashed var(--teal);border-radius:8px;padding:18px;margin-top:10px;}
+  .new-item-form h3{font-size:.85rem;color:var(--navy);margin-bottom:12px;}
+  .new-item-form .item-fields{margin-bottom:10px;}
+  .file-input-wrap{display:flex;align-items:center;gap:8px;font-size:.76rem;color:var(--muted);}
+
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(120%);background:var(--navy);color:#fff;padding:12px 22px;border-radius:6px;font-size:.82rem;transition:transform .3s;z-index:200;}
+  .toast.show{transform:translateX(-50%) translateY(0);}
+
+  .empty-hint{color:var(--muted);font-size:.85rem;padding:30px;text-align:center;}
+  .loading-hint{color:var(--muted);font-size:.85rem;padding:30px;text-align:center;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <h1>Painel SorriAqua</h1>
+    <p class="sub">Entre com o e-mail e senha cadastrados para gerenciar o catálogo do site.</p>
+    <div id="loginError" class="error-msg"></div>
+    <div class="field">
+      <label for="loginEmail">E-mail</label>
+      <input type="email" id="loginEmail" placeholder="seu@email.com" />
+    </div>
+    <div class="field">
+      <label for="loginPassword">Senha</label>
+      <input type="password" id="loginPassword" placeholder="••••••••" />
+    </div>
+    <button class="btn btn-primary" onclick="doLogin()">Entrar</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="appScreen">
+  <header class="topbar">
+    <div class="topbar-brand">
+      <img src="LOGO.jpeg" alt="SorriAqua" />
+      <div><span>SorriAqua</span><small>Painel de administração</small></div>
+    </div>
+    <div class="topbar-actions">
+      <a href="index.html" target="_blank">Ver site ↗</a>
+      <button class="btn btn-secondary" onclick="doLogout()">Sair</button>
+    </div>
+  </header>
+
+  <nav class="tabs-row">
+    <button class="maintab-btn active" data-maintab="produtos" onclick="switchMainTab('produtos')">Produtos</button>
+    <button class="maintab-btn" data-maintab="marcas" onclick="switchMainTab('marcas')">Marcas Parceiras</button>
+  </nav>
+
+  <main>
+    <!-- PRODUTOS -->
+    <section id="panelProdutos" class="panel active">
+      <div class="toolbar"><h2>Catálogo de produtos</h2></div>
+      <div id="catFilter" class="cat-filter"></div>
+      <div id="productsList"><div class="loading-hint">Carregando...</div></div>
+
+      <div class="new-item-form">
+        <h3>+ Novo produto</h3>
+        <div class="item-fields">
+          <select id="newProdCategoria"></select>
+          <select id="newProdGrupo"><option value="">(sem grupo)</option></select>
+          <select id="newProdMarca"><option value="">(sem marca)</option></select>
+        </div>
+        <div class="item-fields">
+          <input type="text" id="newProdNome" placeholder="Nome do produto" style="flex:1;min-width:200px" />
+        </div>
+        <textarea id="newProdDesc" class="item-desc" placeholder="Descrição (opcional, usada quando o produto não tem tamanhos/variações)"></textarea>
+        <div class="item-fields">
+          <div class="file-input-wrap">
+            <input type="file" id="newProdFile" accept="image/*" />
+          </div>
+          <input type="text" id="newProdImgUrl" placeholder="ou cole a URL da imagem" style="flex:1;min-width:200px" />
+        </div>
+        <button class="btn btn-primary" onclick="createProduct()">Adicionar produto</button>
+      </div>
+    </section>
+
+    <!-- MARCAS -->
+    <section id="panelMarcas" class="panel">
+      <div class="toolbar"><h2>Marcas parceiras</h2></div>
+      <div id="brandsList"><div class="loading-hint">Carregando...</div></div>
+
+      <div class="new-item-form">
+        <h3>+ Nova marca</h3>
+        <div class="item-fields">
+          <input type="text" id="newBrandNome" placeholder="Nome da marca" style="flex:1;min-width:200px" />
+        </div>
+        <div class="item-fields">
+          <div class="file-input-wrap">
+            <input type="file" id="newBrandFile" accept="image/*" />
+          </div>
+          <input type="text" id="newBrandLogoUrl" placeholder="ou cole a URL do logo" style="flex:1;min-width:200px" />
+        </div>
+        <button class="btn btn-primary" onclick="createBrand()">Adicionar marca</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+  // ── CONFIGURAÇÃO ──────────────────────────────────────────────────────
+  // Cole aqui a URL e a chave "anon public" do seu projeto Supabase
+  // (Project Settings → API, depois de rodar supabase-setup.sql).
+  const SUPABASE_URL = 'https://weahpcuyarqtxashprds.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_oRX_NAs6q2mIpKuMWOxI6A_T9J39cAq';
+
+  if (SUPABASE_URL.startsWith('COLE_AQUI') || SUPABASE_ANON_KEY.startsWith('COLE_AQUI')) {
+    document.querySelector('.login-card').innerHTML =
+      '<h1>Painel ainda não configurado</h1>' +
+      '<p class="sub">Abra o arquivo <code>admin.html</code> e preencha SUPABASE_URL e SUPABASE_ANON_KEY ' +
+      'com os dados do seu projeto Supabase (Project Settings → API) antes de usar o painel.</p>';
+    throw new Error('Supabase não configurado em admin.html');
+  }
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  window.supabase = supabase;
+
+  let categories = [];
+  let groups = [];
+  let brands = [];
+  let products = [];
+  let variantsByProduct = {};
+  let activeCatSlug = null;
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
+  // ── AUTH ──────────────────────────────────────────────────────────────
+  window.doLogin = async function () {
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const errEl = document.getElementById('loginError');
+    errEl.classList.remove('show');
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      errEl.textContent = 'Não foi possível entrar: ' + error.message;
+      errEl.classList.add('show');
+      return;
+    }
+    enterApp();
+  };
+
+  window.doLogout = async function () {
+    await supabase.auth.signOut();
+    document.getElementById('appScreen').style.display = 'none';
+    document.getElementById('loginScreen').style.display = 'flex';
+  };
+
+  async function enterApp() {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('appScreen').style.display = 'flex';
+    await loadAll();
+  }
+
+  window.switchMainTab = function (tab) {
+    document.querySelectorAll('.maintab-btn').forEach(b => b.classList.toggle('active', b.dataset.maintab === tab));
+    document.getElementById('panelProdutos').classList.toggle('active', tab === 'produtos');
+    document.getElementById('panelMarcas').classList.toggle('active', tab === 'marcas');
+  };
+
+  // ── CARREGAMENTO ──────────────────────────────────────────────────────
+  async function loadAll() {
+    const [catRes, grpRes, brandRes, prodRes, varRes] = await Promise.all([
+      supabase.from('categories').select('*').order('order_index'),
+      supabase.from('product_groups').select('*').order('order_index'),
+      supabase.from('brands').select('*').order('order_index'),
+      supabase.from('products').select('*').order('order_index'),
+      supabase.from('product_variants').select('*').order('order_index'),
+    ]);
+    categories = catRes.data || [];
+    groups = grpRes.data || [];
+    brands = brandRes.data || [];
+    products = prodRes.data || [];
+    variantsByProduct = {};
+    (varRes.data || []).forEach(v => {
+      (variantsByProduct[v.product_id] = variantsByProduct[v.product_id] || []).push(v);
+    });
+
+    if (!activeCatSlug && categories.length) activeCatSlug = categories[0].slug;
+    renderCatFilter();
+    renderProducts();
+    renderBrandOptions();
+    renderGroupOptions();
+    renderBrands();
+  }
+
+  function renderCatFilter() {
+    const el = document.getElementById('catFilter');
+    el.innerHTML = categories.map(c =>
+      `<button class="${c.slug === activeCatSlug ? 'active' : ''}" onclick="setActiveCat('${c.slug}')">${c.label}</button>`
+    ).join('');
+    const sel = document.getElementById('newProdCategoria');
+    sel.innerHTML = categories.map(c => `<option value="${c.id}">${c.label}</option>`).join('');
+    sel.onchange = renderGroupOptions;
+  }
+
+  window.setActiveCat = function (slug) {
+    activeCatSlug = slug;
+    renderCatFilter();
+    renderProducts();
+  };
+
+  function renderGroupOptions() {
+    const catSel = document.getElementById('newProdCategoria');
+    const catId = catSel.value || (categories.find(c => c.slug === activeCatSlug) || {}).id;
+    const grpSel = document.getElementById('newProdGrupo');
+    const opts = groups.filter(g => g.category_id === catId);
+    grpSel.innerHTML = '<option value="">(sem grupo)</option>' + opts.map(g => `<option value="${g.id}">${g.label}</option>`).join('');
+  }
+
+  function renderBrandOptions() {
+    const sel = document.getElementById('newProdMarca');
+    sel.innerHTML = '<option value="">(sem marca)</option>' + brands.map(b => `<option value="${b.id}">${b.name}</option>`).join('');
+  }
+
+  // ── PRODUTOS ──────────────────────────────────────────────────────────
+  function renderProducts() {
+    const cat = categories.find(c => c.slug === activeCatSlug);
+    const listEl = document.getElementById('productsList');
+    if (!cat) { listEl.innerHTML = '<div class="empty-hint">Nenhuma categoria.</div>'; return; }
+
+    const catGroups = groups.filter(g => g.category_id === cat.id).sort((a, b) => a.order_index - b.order_index);
+    const catProducts = products.filter(p => p.category_id === cat.id);
+
+    if (!catProducts.length) {
+      listEl.innerHTML = '<div class="empty-hint">Nenhum produto nesta categoria ainda.</div>';
+      return;
+    }
+
+    if (catGroups.length) {
+      listEl.innerHTML = catGroups.map(g => {
+        const items = catProducts.filter(p => p.group_id === g.id).sort((a, b) => a.order_index - b.order_index);
+        if (!items.length) return '';
+        return `<div class="group-block"><div class="group-title">${g.label}</div>${items.map(p => productRowHtml(p, items)).join('')}</div>`;
+      }).join('');
+      const ungrouped = catProducts.filter(p => !p.group_id).sort((a, b) => a.order_index - b.order_index);
+      if (ungrouped.length) {
+        listEl.innerHTML += `<div class="group-block"><div class="group-title">Sem grupo</div>${ungrouped.map(p => productRowHtml(p, ungrouped)).join('')}</div>`;
+      }
+    } else {
+      const items = catProducts.sort((a, b) => a.order_index - b.order_index);
+      listEl.innerHTML = items.map(p => productRowHtml(p, items)).join('');
+    }
+  }
+
+  function productRowHtml(p, siblingList) {
+    const idx = siblingList.findIndex(s => s.id === p.id);
+    const variants = (variantsByProduct[p.id] || []).sort((a, b) => a.order_index - b.order_index);
+    const brandOptions = brands.map(b => `<option value="${b.id}" ${b.id === p.brand_id ? 'selected' : ''}>${b.name}</option>`).join('');
+    return `
+    <div class="item-row ${p.active ? '' : 'inactive'}" data-id="${p.id}">
+      <img class="item-thumb" src="${p.image_url || ''}" onerror="this.style.visibility='hidden'" />
+      <div class="item-body">
+        <div class="item-row-top">
+          <input type="text" value="${escapeAttr(p.name)}" onchange="updateProduct('${p.id}',{name:this.value})" />
+        </div>
+        <div class="item-fields">
+          <select onchange="updateProduct('${p.id}',{brand_id:this.value||null})">
+            <option value="">(sem marca)</option>${brandOptions}
+          </select>
+          <input type="text" value="${escapeAttr(p.image_url || '')}" placeholder="URL da imagem" onchange="updateProduct('${p.id}',{image_url:this.value})" style="flex:1;min-width:180px" />
+        </div>
+        <textarea class="item-desc" placeholder="Descrição (opcional)" onchange="updateProduct('${p.id}',{description:this.value})">${escapeHtml(p.description || '')}</textarea>
+        <div class="variants-row" id="variants-${p.id}">
+          ${variants.map(v => `<span class="variant-tag">${escapeHtml(v.label)}<button onclick="deleteVariant('${v.id}','${p.id}')">×</button></span>`).join('')}
+          <span class="add-variant-inline">
+            <input type="text" id="newVariant-${p.id}" placeholder="Novo tamanho" />
+            <button class="btn-icon" onclick="addVariant('${p.id}')">+</button>
+          </span>
+        </div>
+        <div class="item-actions">
+          <div class="move-btns">
+            <button class="btn-icon" onclick="moveProduct('${p.id}',${idx},-1)" ${idx === 0 ? 'disabled' : ''}>▲</button>
+            <button class="btn-icon" onclick="moveProduct('${p.id}',${idx},1)" ${idx === siblingList.length - 1 ? 'disabled' : ''}>▼</button>
+          </div>
+          <label><input type="checkbox" ${p.active ? 'checked' : ''} onchange="updateProduct('${p.id}',{active:this.checked})" /> Ativo</label>
+          <input type="file" accept="image/*" style="max-width:140px;font-size:.7rem" onchange="uploadProductImage('${p.id}',this.files[0])" />
+          <button class="btn btn-danger" onclick="deleteProduct('${p.id}')">Excluir</button>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  window.updateProduct = async function (id, patch) {
+    const { error } = await supabase.from('products').update(patch).eq('id', id);
+    if (error) { showToast('Erro ao salvar: ' + error.message); return; }
+    Object.assign(products.find(p => p.id === id), patch);
+    showToast('Salvo.');
+  };
+
+  window.deleteProduct = async function (id) {
+    if (!confirm('Excluir este produto? Essa ação não pode ser desfeita.')) return;
+    const { error } = await supabase.from('products').delete().eq('id', id);
+    if (error) { showToast('Erro ao excluir: ' + error.message); return; }
+    products = products.filter(p => p.id !== id);
+    renderProducts();
+    showToast('Produto excluído.');
+  };
+
+  window.moveProduct = async function (id, idx, dir) {
+    const cat = categories.find(c => c.slug === activeCatSlug);
+    const p = products.find(x => x.id === id);
+    const siblings = products.filter(x => x.category_id === p.category_id && x.group_id === p.group_id).sort((a, b) => a.order_index - b.order_index);
+    const neighbor = siblings[idx + dir];
+    if (!neighbor) return;
+    const a = p.order_index, b = neighbor.order_index;
+    await Promise.all([
+      supabase.from('products').update({ order_index: b }).eq('id', p.id),
+      supabase.from('products').update({ order_index: a }).eq('id', neighbor.id),
+    ]);
+    p.order_index = b; neighbor.order_index = a;
+    renderProducts();
+  };
+
+  window.addVariant = async function (productId) {
+    const input = document.getElementById('newVariant-' + productId);
+    const label = input.value.trim();
+    if (!label) return;
+    const existing = variantsByProduct[productId] || [];
+    const { data, error } = await supabase.from('product_variants').insert({
+      product_id: productId, label, order_index: existing.length + 1
+    }).select().single();
+    if (error) { showToast('Erro: ' + error.message); return; }
+    (variantsByProduct[productId] = variantsByProduct[productId] || []).push(data);
+    input.value = '';
+    renderProducts();
+  };
+
+  window.deleteVariant = async function (variantId, productId) {
+    const { error } = await supabase.from('product_variants').delete().eq('id', variantId);
+    if (error) { showToast('Erro: ' + error.message); return; }
+    variantsByProduct[productId] = (variantsByProduct[productId] || []).filter(v => v.id !== variantId);
+    renderProducts();
+  };
+
+  window.uploadProductImage = async function (productId, file) {
+    if (!file) return;
+    const path = `products/${productId}-${Date.now()}-${file.name}`;
+    const { error: upErr } = await supabase.storage.from('catalogo').upload(path, file);
+    if (upErr) { showToast('Erro no upload: ' + upErr.message); return; }
+    const { data } = supabase.storage.from('catalogo').getPublicUrl(path);
+    await updateProduct(productId, { image_url: data.publicUrl });
+    renderProducts();
+  };
+
+  window.createProduct = async function () {
+    const name = document.getElementById('newProdNome').value.trim();
+    const categoryId = document.getElementById('newProdCategoria').value;
+    const groupId = document.getElementById('newProdGrupo').value || null;
+    const brandId = document.getElementById('newProdMarca').value || null;
+    const description = document.getElementById('newProdDesc').value.trim() || null;
+    const file = document.getElementById('newProdFile').files[0];
+    let imageUrl = document.getElementById('newProdImgUrl').value.trim() || null;
+    if (!name || !categoryId) { showToast('Preencha ao menos o nome e a categoria.'); return; }
+
+    const siblingCount = products.filter(p => p.category_id === categoryId && p.group_id === groupId).length;
+    const { data, error } = await supabase.from('products').insert({
+      name, category_id: categoryId, group_id: groupId, brand_id: brandId,
+      description, image_url: imageUrl, order_index: siblingCount + 1
+    }).select().single();
+    if (error) { showToast('Erro: ' + error.message); return; }
+
+    if (file) {
+      const path = `products/${data.id}-${Date.now()}-${file.name}`;
+      const { error: upErr } = await supabase.storage.from('catalogo').upload(path, file);
+      if (!upErr) {
+        const { data: pub } = supabase.storage.from('catalogo').getPublicUrl(path);
+        await supabase.from('products').update({ image_url: pub.publicUrl }).eq('id', data.id);
+        data.image_url = pub.publicUrl;
+      }
+    }
+    products.push(data);
+    variantsByProduct[data.id] = [];
+    document.getElementById('newProdNome').value = '';
+    document.getElementById('newProdDesc').value = '';
+    document.getElementById('newProdImgUrl').value = '';
+    document.getElementById('newProdFile').value = '';
+    activeCatSlug = categories.find(c => c.id === categoryId).slug;
+    renderCatFilter();
+    renderProducts();
+    showToast('Produto adicionado.');
+  };
+
+  // ── MARCAS ────────────────────────────────────────────────────────────
+  function renderBrands() {
+    const listEl = document.getElementById('brandsList');
+    if (!brands.length) { listEl.innerHTML = '<div class="empty-hint">Nenhuma marca cadastrada.</div>'; return; }
+    const sorted = [...brands].sort((a, b) => a.order_index - b.order_index);
+    listEl.innerHTML = sorted.map((b, idx) => `
+      <div class="item-row ${b.active ? '' : 'inactive'}">
+        <img class="item-thumb" src="${b.logo_url || ''}" onerror="this.style.visibility='hidden'" />
+        <div class="item-body">
+          <div class="item-row-top">
+            <input type="text" value="${escapeAttr(b.name)}" onchange="updateBrand('${b.id}',{name:this.value})" />
+          </div>
+          <div class="item-fields">
+            <input type="text" value="${escapeAttr(b.logo_url || '')}" placeholder="URL do logo" onchange="updateBrand('${b.id}',{logo_url:this.value})" style="flex:1;min-width:200px" />
+            <input type="file" accept="image/*" style="max-width:140px;font-size:.7rem" onchange="uploadBrandLogo('${b.id}',this.files[0])" />
+          </div>
+          <div class="item-actions">
+            <div class="move-btns">
+              <button class="btn-icon" onclick="moveBrand('${b.id}',${idx},-1)" ${idx === 0 ? 'disabled' : ''}>▲</button>
+              <button class="btn-icon" onclick="moveBrand('${b.id}',${idx},1)" ${idx === sorted.length - 1 ? 'disabled' : ''}>▼</button>
+            </div>
+            <label><input type="checkbox" ${b.active ? 'checked' : ''} onchange="updateBrand('${b.id}',{active:this.checked})" /> Ativo</label>
+            <button class="btn btn-danger" onclick="deleteBrand('${b.id}')">Excluir</button>
+          </div>
+        </div>
+      </div>`).join('');
+  }
+
+  window.updateBrand = async function (id, patch) {
+    const { error } = await supabase.from('brands').update(patch).eq('id', id);
+    if (error) { showToast('Erro ao salvar: ' + error.message); return; }
+    Object.assign(brands.find(b => b.id === id), patch);
+    renderBrandOptions();
+    showToast('Salvo.');
+  };
+
+  window.deleteBrand = async function (id) {
+    if (!confirm('Excluir esta marca?')) return;
+    const { error } = await supabase.from('brands').delete().eq('id', id);
+    if (error) { showToast('Erro ao excluir: ' + error.message); return; }
+    brands = brands.filter(b => b.id !== id);
+    renderBrands();
+    renderBrandOptions();
+    showToast('Marca excluída.');
+  };
+
+  window.moveBrand = async function (id, idx, dir) {
+    const sorted = [...brands].sort((a, b) => a.order_index - b.order_index);
+    const neighbor = sorted[idx + dir];
+    const current = sorted[idx];
+    if (!neighbor) return;
+    const a = current.order_index, b = neighbor.order_index;
+    await Promise.all([
+      supabase.from('brands').update({ order_index: b }).eq('id', current.id),
+      supabase.from('brands').update({ order_index: a }).eq('id', neighbor.id),
+    ]);
+    current.order_index = b; neighbor.order_index = a;
+    renderBrands();
+  };
+
+  window.uploadBrandLogo = async function (brandId, file) {
+    if (!file) return;
+    const path = `brands/${brandId}-${Date.now()}-${file.name}`;
+    const { error: upErr } = await supabase.storage.from('catalogo').upload(path, file);
+    if (upErr) { showToast('Erro no upload: ' + upErr.message); return; }
+    const { data } = supabase.storage.from('catalogo').getPublicUrl(path);
+    await updateBrand(brandId, { logo_url: data.publicUrl });
+    renderBrands();
+  };
+
+  window.createBrand = async function () {
+    const name = document.getElementById('newBrandNome').value.trim();
+    const file = document.getElementById('newBrandFile').files[0];
+    let logoUrl = document.getElementById('newBrandLogoUrl').value.trim() || null;
+    if (!name) { showToast('Digite o nome da marca.'); return; }
+
+    const { data, error } = await supabase.from('brands').insert({
+      name, logo_url: logoUrl, order_index: brands.length + 1
+    }).select().single();
+    if (error) { showToast('Erro: ' + error.message); return; }
+
+    if (file) {
+      const path = `brands/${data.id}-${Date.now()}-${file.name}`;
+      const { error: upErr } = await supabase.storage.from('catalogo').upload(path, file);
+      if (!upErr) {
+        const { data: pub } = supabase.storage.from('catalogo').getPublicUrl(path);
+        await supabase.from('brands').update({ logo_url: pub.publicUrl }).eq('id', data.id);
+        data.logo_url = pub.publicUrl;
+      }
+    }
+    brands.push(data);
+    document.getElementById('newBrandNome').value = '';
+    document.getElementById('newBrandLogoUrl').value = '';
+    document.getElementById('newBrandFile').value = '';
+    renderBrands();
+    renderBrandOptions();
+    showToast('Marca adicionada.');
+  };
+
+  // ── HELPERS ───────────────────────────────────────────────────────────
+  function escapeHtml(s) { return (s || '').replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c])); }
+  function escapeAttr(s) { return escapeHtml(s).replace(/"/g, '&quot;'); }
+
+  // ── SESSÃO EXISTENTE ──────────────────────────────────────────────────
+  supabase.auth.getSession().then(({ data }) => {
+    if (data.session) enterApp();
+  });
+</script>
+</body>
+</html>

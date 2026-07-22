@@ -1,0 +1,11 @@
+# Fotos originais não otimizadas (o site usa as versões em IMG-web/)
+IMG/
+
+# Documentos de referência (não usados pelo site)
+*.docx
+*.pdf
+
+# Backups e arquivos de sistema
+*.bak
+.DS_Store
+._*
