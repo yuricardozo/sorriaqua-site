@@ -84,7 +84,7 @@
       display:flex; align-items:center;
       padding:140px 6vw 80px;
       overflow:hidden;
-      background:linear-gradient(135deg, var(--navy) 0%, #0f4258 48%, var(--teal-dk) 100%);
+      background:linear-gradient(180deg,#eaf9ff 0%,var(--bg) 55%,#f5fdff 100%);
     }
 
     .hero-grid {
@@ -94,36 +94,44 @@
     }
 
     /* Water ripple deco */
-    .hero-ripple { position:absolute; inset:0; overflow:hidden; pointer-events:none; opacity:.3; }
+    .hero-ripple { position:absolute; inset:0; overflow:hidden; pointer-events:none; opacity:.35; }
     .hero-ripple::before,.hero-ripple::after {
       content:''; position:absolute; border-radius:50%;
-      border:1px solid rgba(255,255,255,.22);
+      border:1px solid rgba(60,200,190,.4);
     }
     .hero-ripple::before { width:800px; height:800px; bottom:-320px; left:-220px; animation:ripple 8s ease-in-out infinite; }
     .hero-ripple::after  { width:520px; height:520px; top:-220px; right:-160px; animation:ripple 8s ease-in-out 1.5s infinite; }
     @keyframes ripple { 0%,100%{transform:scale(1);opacity:.4} 50%{transform:scale(1.07);opacity:.15} }
 
     /* Sun decoration */
-    .hero-sun { position:absolute; right:3vw; top:6vh; opacity:.16; animation:sunSpin 60s linear infinite; pointer-events:none; }
+    .hero-sun { position:absolute; right:3vw; top:6vh; opacity:.08; animation:sunSpin 60s linear infinite; pointer-events:none; }
     @keyframes sunSpin { to{transform:rotate(360deg)} }
 
     .hero-content { position:relative; z-index:5; }
     .hero-eyebrow {
       display:inline-flex; align-items:center; gap:8px;
       font-size:.7rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase;
-      color:var(--teal-lt); margin-bottom:22px;
+      color:var(--teal); margin-bottom:22px;
       opacity:0; animation:fadeUp .6s ease 2.4s forwards;
     }
-    .hero-eyebrow::before,.hero-eyebrow::after { content:''; width:28px; height:1px; background:var(--teal-lt); display:block; }
+    .hero-eyebrow::before,.hero-eyebrow::after { content:''; width:28px; height:1px; background:var(--teal); display:block; }
     .hero h1 {
       font-family:'Playfair Display',serif;
-      font-size:clamp(2.5rem,4.2vw,3.85rem); line-height:1.14; color:#fff;
-      margin-bottom:24px;
+      font-size:clamp(2.5rem,4.2vw,3.85rem); line-height:1.14; color:var(--navy);
+      margin-bottom:22px;
       opacity:0; animation:fadeUp .7s ease 2.6s forwards;
     }
-    .hero h1 em { font-style:normal; color:var(--teal-lt); }
+    .hero h1 em { font-style:normal; color:var(--teal); }
+    .hero-pillars {
+      display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+      margin-bottom:26px;
+      opacity:0; animation:fadeUp .7s ease 2.7s forwards;
+    }
+    .hero-pillar { display:inline-flex; align-items:center; gap:7px; font-size:.76rem; font-weight:600; color:var(--navy); }
+    .hero-pillar svg { color:var(--teal-dk); flex-shrink:0; }
+    .hero-pillar-sep { width:4px; height:4px; border-radius:50%; background:var(--border); }
     .hero p {
-      font-size:1rem; font-weight:300; color:rgba(255,255,255,.78);
+      font-size:1rem; font-weight:300; color:var(--muted);
       max-width:480px; margin:0 0 44px; line-height:1.8;
       opacity:0; animation:fadeUp .7s ease 2.8s forwards;
     }
@@ -133,24 +141,25 @@
     }
     .btn-primary { display:inline-flex; align-items:center; gap:9px; background:var(--orange); color:#fff; text-decoration:none; border-radius:4px; padding:15px 30px; font-size:.88rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; transition:background .2s,transform .2s,box-shadow .2s; }
     .btn-primary:hover { background:var(--orange-lt); transform:translateY(-3px); box-shadow:0 8px 24px rgba(240,120,64,.3); }
-    .btn-secondary { display:inline-flex; align-items:center; gap:9px; border:1.5px solid rgba(255,255,255,.5); color:#fff; text-decoration:none; border-radius:4px; padding:15px 30px; font-size:.88rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; transition:border-color .2s,background .2s,transform .2s; }
-    .btn-secondary:hover { background:rgba(255,255,255,.1); border-color:#fff; transform:translateY(-3px); }
+    .btn-secondary { display:inline-flex; align-items:center; gap:9px; border:1.5px solid var(--teal); color:var(--teal-dk); text-decoration:none; border-radius:4px; padding:15px 30px; font-size:.88rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; transition:border-color .2s,background .2s,transform .2s; }
+    .btn-secondary:hover { background:rgba(60,200,190,.08); transform:translateY(-3px); }
 
     /* Hero photo card */
     .hero-photo { position:relative; z-index:5; opacity:0; animation:fadeUp .8s ease 2.4s forwards; }
-    .hero-photo-frame { position:relative; border-radius:20px; overflow:hidden; aspect-ratio:4/5; box-shadow:0 40px 80px rgba(0,0,0,.35); border:5px solid rgba(255,255,255,.14); }
+    .hero-photo-frame { position:relative; border-radius:20px; overflow:hidden; aspect-ratio:4/3; box-shadow:0 30px 60px rgba(13,27,62,.18); border:6px solid #fff; }
     .hero-slide { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; opacity:0; transition:opacity 1.2s ease; }
     .hero-slide.active { opacity:1; }
-    .hero-photo-badge { position:absolute; bottom:-18px; left:-18px; background:var(--orange); color:#fff; padding:16px 22px; border-radius:12px; box-shadow:0 14px 32px rgba(240,120,64,.4); }
+    .hero-photo-badge { position:absolute; bottom:-18px; left:-18px; background:var(--orange); color:#fff; padding:16px 22px; border-radius:12px; box-shadow:0 14px 32px rgba(240,120,64,.35); }
     .hero-photo-badge strong { font-family:'Playfair Display',serif; font-size:1.55rem; display:block; line-height:1; }
     .hero-photo-badge span { font-size:.6rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
 
     @media(max-width:900px){
       .hero-grid { grid-template-columns:1fr; text-align:center; }
       .hero-eyebrow { justify-content:center; }
+      .hero-pillars { justify-content:center; }
       .hero p { margin:0 auto 44px; }
       .hero-actions { justify-content:center; }
-      .hero-photo { max-width:340px; margin:0 auto; }
+      .hero-photo { max-width:400px; margin:36px auto 0; }
     }
 
     /* ── AVALIAÇÕES GOOGLE ── */
@@ -345,16 +354,6 @@
     .form-submit:hover { background:var(--orange-lt); transform:translateY(-2px); }
     @media(max-width:768px){.contato-inner{grid-template-columns:1fr;gap:52px}}
 
-    /* ── PARCEIROS (aba do catálogo) ── */
-    .parceiros-inner { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
-    .parceiros-beneficios { list-style:none; margin-top:28px; }
-    .parceiros-beneficios li { display:flex; align-items:flex-start; gap:13px; padding:13px 0; border-bottom:1px solid var(--border); font-size:.9rem; color:var(--muted); }
-    .parceiros-beneficios li:first-child { border-top:1px solid var(--border); }
-    .parceiros-form-card { background:var(--white); border:1px solid var(--border); border-radius:10px; padding:40px 36px; }
-    .form-submit-parceiro { width:100%; padding:15px; background:transparent; border:2px solid var(--teal); color:var(--teal); border-radius:4px; font-size:.88rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; cursor:pointer; transition:background .2s,color .2s,transform .2s; }
-    .form-submit-parceiro:hover { background:var(--teal); color:#fff; transform:translateY(-2px); }
-    @media(max-width:768px){.parceiros-inner{grid-template-columns:1fr;gap:52px}.parceiros-form-card{padding:28px 22px}}
-
     /* ── FOOTER ── */
     footer { background:var(--navy); padding:52px 6vw 32px; }
     .footer-inner { display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:36px; margin-bottom:44px; }
@@ -398,7 +397,7 @@
     <li><a href="#sobre">Sobre</a></li>
     <li><a href="#marcas">Marcas</a></li>
     <li><a href="#produtos">Produtos</a></li>
-    <li><a href="#produtos" onclick="event.preventDefault(); goToCatalogTab('parceiro');">Parceiros</a></li>
+    <li><a href="#contato">Parceiros</a></li>
     <li><a href="#contato">Contato</a></li>
   </ul>
   <a href="https://wa.me/5566999209898" target="_blank" class="nav-cta">Falar no WhatsApp</a>
@@ -423,8 +422,29 @@
   <div class="hero-grid">
     <div class="hero-content">
       <span class="hero-eyebrow">Sorriso, Mato Grosso</span>
-      <h1>Sua piscina merece<br/>o <em>melhor</em> cuidado</h1>
-      <p>Produtos, equipamentos e serviços selecionados para manter sua piscina limpa, segura e perfeita durante todo o ano, do primeiro tratamento ao pós-obra.</p>
+      <h1>Sua piscina, do <em>projeto</em><br/>à manutenção</h1>
+      <div class="hero-pillars">
+        <span class="hero-pillar">
+          <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 16V6l6-4 6 4v10M3 16h12M7 16v-5h4v5"/></svg>
+          Construção
+        </span>
+        <span class="hero-pillar-sep"></span>
+        <span class="hero-pillar">
+          <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M9 2c3 4 5 6.8 5 9.5A5 5 0 019 16.5 5 5 0 014 11.5C4 8.8 6 6 9 2z"/></svg>
+          Produtos
+        </span>
+        <span class="hero-pillar-sep"></span>
+        <span class="hero-pillar">
+          <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="9" cy="9" r="3"/><path d="M9 1v2M9 15v2M1 9h2M15 9h2M3.22 3.22l1.42 1.42M13.36 13.36l1.42 1.42M3.22 14.78l1.42-1.42M13.36 4.64l1.42-1.42" stroke-linecap="round"/></svg>
+          Assistência Técnica
+        </span>
+        <span class="hero-pillar-sep"></span>
+        <span class="hero-pillar">
+          <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M12.5 2.5a4 4 0 00-5.4 5.4L2 13v3h3l5.1-5.1a4 4 0 005.4-5.4l-2.6 2.6-2-2 2.6-2.6z"/></svg>
+          Manutenção
+        </span>
+      </div>
+      <p>Projetos, produtos e assistência técnica reunidos em um só lugar, para sua piscina ficar sempre pronta para o mergulho.</p>
       <div class="hero-actions">
         <a href="https://wa.me/5566999209898" target="_blank" class="btn-primary">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
@@ -435,8 +455,8 @@
     </div>
     <div class="hero-photo">
       <div class="hero-photo-frame" id="heroSlides">
-        <img class="hero-slide active" src="IMG-web/IMG_1801.JPG.jpeg" alt="Fachada SorriAqua Piscinas" />
-        <img class="hero-slide" src="IMG-web/IMG_1805.JPG.jpeg" alt="Fachada SorriAqua Piscinas" />
+        <img class="hero-slide active" src="IMG-web/hero-piscina.jpg" alt="Piscina entregue pela SorriAqua" />
+        <img class="hero-slide" src="IMG-web/IMG_1801.JPG.jpeg" alt="Fachada SorriAqua Piscinas" />
         <img class="hero-slide" src="IMG-web/IMG_5210.JPG.jpeg" alt="Loja SorriAqua Piscinas" />
         <img class="hero-slide" src="IMG-web/IMG_1781.JPG.jpeg" alt="Interior da loja SorriAqua" />
       </div>
@@ -679,10 +699,6 @@
         <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M4 14l8-8M7 4l3 3-5 5-3-3z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 16l2-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
         Limpeza / Piscineiro
       </button>
-      <button class="tab-btn" data-tab="parceiro" role="tab">
-        <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="6" cy="5" r="2.2" stroke="currentColor" stroke-width="1.5"/><circle cx="13" cy="5" r="2.2" stroke="currentColor" stroke-width="1.5"/><path d="M2 16c0-3 2-5 4-5s4 2 4 5M9 16c0-3 2-5 4-5s3 2 3 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-        Ser Parceiro
-      </button>
     </div>
   </div>
 
@@ -734,52 +750,6 @@
     <div class="dynamic-products" data-cat="limpeza"><div class="empty-hint">Carregando...</div></div>
   </div>
 
-  <!-- ═══ SER PARCEIRO ═══ -->
-  <div class="tab-panel" data-panel="parceiro">
-    <div class="tab-intro">
-      <p>A SorriAqua conta com uma rede crescente de parceiros: fornecedores, piscineiros e prestadores de serviço que atuam com qualidade e confiança em Sorriso e região.</p>
-    </div>
-    <div class="parceiros-inner">
-      <div class="parceiros-text">
-        <ul class="parceiros-beneficios">
-          <li><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#F07840" stroke-width="1.5"/><path d="M6 10l3 3 5-5" stroke="#F07840" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Divulgue seus serviços e produtos para nossa base de clientes</li>
-          <li><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#F07840" stroke-width="1.5"/><path d="M6 10l3 3 5-5" stroke="#F07840" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Condições comerciais diferenciadas para parceiros da rede</li>
-          <li><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#F07840" stroke-width="1.5"/><path d="M6 10l3 3 5-5" stroke="#F07840" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Acesso antecipado a lançamentos e novidades do setor</li>
-          <li><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#F07840" stroke-width="1.5"/><path d="M6 10l3 3 5-5" stroke="#F07840" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Suporte técnico e treinamento sobre os produtos que comercializamos</li>
-        </ul>
-      </div>
-      <div>
-        <div class="parceiros-form-card">
-          <p class="form-title">Quero ser parceiro</p>
-          <p style="font-size:.87rem;font-weight:300;color:var(--muted);margin-bottom:26px;line-height:1.7">Preencha o formulário e nossa equipe entrará em contato para apresentar as oportunidades de parceria.</p>
-          <div class="form-group">
-            <label for="p-nome">Nome / Empresa</label>
-            <input type="text" id="p-nome" placeholder="Seu nome ou razão social" />
-          </div>
-          <div class="form-group">
-            <label for="p-telefone">Telefone / WhatsApp</label>
-            <input type="tel" id="p-telefone" placeholder="(66) 99999-9999" />
-          </div>
-          <div class="form-group">
-            <label for="p-tipo">Tipo de Parceria</label>
-            <select id="p-tipo">
-              <option value="" disabled selected>Selecione</option>
-              <option>Fornecedor de Produtos</option>
-              <option>Piscineiro / Prestador de Serviços</option>
-              <option>Distribuidor</option>
-              <option>Outro</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="p-msg">Como posso contribuir</label>
-            <textarea id="p-msg" placeholder="Descreva brevemente seus serviços ou produtos..."></textarea>
-          </div>
-          <button onclick="sendParceiroWA(event)" class="form-submit-parceiro">Enviar proposta pelo WhatsApp</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
 </section>
 
 <!-- CONTATO -->
@@ -829,10 +799,10 @@
           <option value="" disabled selected>Selecione uma categoria</option>
           <option>Produtos Químicos</option>
           <option>Equipamentos</option>
-          <option>Acessórios</option>
-          <option>Serviços de Manutenção</option>
-          <option>Revitalização de Casa de Máquinas</option>
-          <option>Outro</option>
+          <option>Boias e Lazer</option>
+          <option>Manutenção e Assistência</option>
+          <option>Limpeza / Piscineiro</option>
+          <option>Ser Parceiro</option>
         </select>
       </div>
       <div class="form-group">
@@ -858,7 +828,7 @@
       <a href="#categorias">Categorias</a>
       <a href="#sobre">Sobre nós</a>
       <a href="#produtos">Produtos</a>
-      <a href="#produtos" onclick="event.preventDefault(); goToCatalogTab('parceiro');">Seja Parceiro</a>
+      <a href="#contato">Seja Parceiro</a>
       <a href="#contato">Contato</a>
     </div>
     <div class="footer-links">
@@ -977,19 +947,6 @@
       '\nInteresse: '+(int||'(não informado)')+
       '\n\n'+msg), '_blank');
   }
-  function sendParceiroWA(e) {
-    e.preventDefault();
-    var nome = document.getElementById('p-nome').value.trim();
-    var tel  = document.getElementById('p-telefone').value.trim();
-    var tipo = document.getElementById('p-tipo').value;
-    var msg  = document.getElementById('p-msg').value.trim();
-    window.open('https://wa.me/5566999209898?text='+encodeURIComponent(
-      'Olá, SorriAqua! Tenho interesse em ser parceiro.\n\nNome/Empresa: '+(nome||'(não informado)')+
-      '\nTelefone: '+(tel||'(não informado)')+
-      '\nTipo de parceria: '+(tipo||'(não informado)')+
-      '\n\n'+msg), '_blank');
-  }
-
   // ── CARRINHO DE ORÇAMENTO ──
   var cart = [];
   try { cart = JSON.parse(localStorage.getItem('sorriaqua_cart') || '[]'); } catch (e) { cart = []; }
