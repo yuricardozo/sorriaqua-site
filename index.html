@@ -6,7 +6,7 @@
   <title>SorriAqua Piscinas em Sorriso, MT</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -84,55 +84,49 @@
       display:flex; align-items:center;
       padding:140px 6vw 80px;
       overflow:hidden;
-      background:linear-gradient(180deg,#eaf9ff 0%,var(--bg) 55%,#f5fdff 100%);
+      background:var(--bg);
+    }
+
+    .hero-bg { position:absolute; inset:0; z-index:0; }
+    .hero-slide { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; opacity:0; transition:opacity 1.8s ease; }
+    .hero-slide.active { opacity:1; }
+    .hero-fade {
+      position:absolute; inset:0; z-index:1; pointer-events:none;
+      background:linear-gradient(90deg, var(--bg) 0%, var(--bg) 30%, rgba(242,251,255,.86) 44%, rgba(242,251,255,.4) 58%, rgba(242,251,255,0) 74%);
     }
 
     .hero-grid {
-      position:relative; z-index:5;
-      display:grid; grid-template-columns:1.05fr .95fr; gap:64px; align-items:center;
+      position:relative; z-index:2;
       max-width:1240px; margin:0 auto; width:100%;
     }
 
-    /* Water ripple deco */
-    .hero-ripple { position:absolute; inset:0; overflow:hidden; pointer-events:none; opacity:.35; }
-    .hero-ripple::before,.hero-ripple::after {
-      content:''; position:absolute; border-radius:50%;
-      border:1px solid rgba(60,200,190,.4);
-    }
-    .hero-ripple::before { width:800px; height:800px; bottom:-320px; left:-220px; animation:ripple 8s ease-in-out infinite; }
-    .hero-ripple::after  { width:520px; height:520px; top:-220px; right:-160px; animation:ripple 8s ease-in-out 1.5s infinite; }
-    @keyframes ripple { 0%,100%{transform:scale(1);opacity:.4} 50%{transform:scale(1.07);opacity:.15} }
-
-    /* Sun decoration */
-    .hero-sun { position:absolute; right:3vw; top:6vh; opacity:.08; animation:sunSpin 60s linear infinite; pointer-events:none; }
-    @keyframes sunSpin { to{transform:rotate(360deg)} }
-
-    .hero-content { position:relative; z-index:5; }
+    .hero-content { max-width:560px; }
     .hero-eyebrow {
       display:inline-flex; align-items:center; gap:8px;
       font-size:.7rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase;
-      color:var(--teal); margin-bottom:22px;
+      color:var(--teal); margin-bottom:20px;
       opacity:0; animation:fadeUp .6s ease 2.4s forwards;
     }
-    .hero-eyebrow::before,.hero-eyebrow::after { content:''; width:28px; height:1px; background:var(--teal); display:block; }
+    .hero-eyebrow::before { content:''; width:28px; height:1px; background:var(--teal); display:block; }
     .hero h1 {
-      font-family:'Playfair Display',serif;
-      font-size:clamp(2.5rem,4.2vw,3.85rem); line-height:1.14; color:var(--navy);
-      margin-bottom:22px;
+      line-height:1.05; margin-bottom:20px;
       opacity:0; animation:fadeUp .7s ease 2.6s forwards;
     }
-    .hero h1 em { font-style:normal; color:var(--teal); }
+    .hero-line1 { display:block; font-family:'Playfair Display',serif; font-weight:700; font-size:clamp(1.7rem,2.9vw,2.4rem); color:var(--navy); }
+    .hero-line2 { display:block; font-family:'Playfair Display',serif; font-weight:700; font-size:clamp(2.6rem,5.4vw,4.1rem); color:var(--teal-dk); }
+    .hero-line3 { display:inline-block; position:relative; font-family:'Caveat',cursive; font-weight:700; font-size:clamp(2rem,4vw,3rem); color:var(--orange); margin-top:4px; }
+    .hero-line3 svg { position:absolute; left:0; bottom:-10px; width:100%; height:auto; }
     .hero-pillars {
-      display:flex; align-items:center; gap:16px; flex-wrap:wrap;
-      margin-bottom:26px;
+      display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+      margin:22px 0 20px;
       opacity:0; animation:fadeUp .7s ease 2.7s forwards;
     }
-    .hero-pillar { display:inline-flex; align-items:center; gap:7px; font-size:.76rem; font-weight:600; color:var(--navy); }
+    .hero-pillar { display:inline-flex; align-items:center; gap:7px; font-size:.78rem; font-weight:600; color:var(--navy); }
     .hero-pillar svg { color:var(--teal-dk); flex-shrink:0; }
-    .hero-pillar-sep { width:4px; height:4px; border-radius:50%; background:var(--border); }
+    .hero-pillar-sep { width:1px; height:16px; background:var(--border); }
     .hero p {
       font-size:1rem; font-weight:300; color:var(--muted);
-      max-width:480px; margin:0 0 44px; line-height:1.8;
+      max-width:480px; margin:0 0 40px; line-height:1.8;
       opacity:0; animation:fadeUp .7s ease 2.8s forwards;
     }
     .hero-actions {
@@ -141,25 +135,16 @@
     }
     .btn-primary { display:inline-flex; align-items:center; gap:9px; background:var(--orange); color:#fff; text-decoration:none; border-radius:4px; padding:15px 30px; font-size:.88rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; transition:background .2s,transform .2s,box-shadow .2s; }
     .btn-primary:hover { background:var(--orange-lt); transform:translateY(-3px); box-shadow:0 8px 24px rgba(240,120,64,.3); }
-    .btn-secondary { display:inline-flex; align-items:center; gap:9px; border:1.5px solid var(--teal); color:var(--teal-dk); text-decoration:none; border-radius:4px; padding:15px 30px; font-size:.88rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; transition:border-color .2s,background .2s,transform .2s; }
+    .btn-secondary { display:inline-flex; align-items:center; gap:9px; border:1.5px solid var(--teal); color:var(--teal-dk); text-decoration:none; border-radius:4px; padding:15px 30px; font-size:.88rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; background:var(--bg); transition:border-color .2s,background .2s,transform .2s; }
     .btn-secondary:hover { background:rgba(60,200,190,.08); transform:translateY(-3px); }
 
-    /* Hero photo card */
-    .hero-photo { position:relative; z-index:5; opacity:0; animation:fadeUp .8s ease 2.4s forwards; }
-    .hero-photo-frame { position:relative; border-radius:20px; overflow:hidden; aspect-ratio:4/3; box-shadow:0 30px 60px rgba(13,27,62,.18); border:6px solid #fff; }
-    .hero-slide { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; opacity:0; transition:opacity 1.2s ease; }
-    .hero-slide.active { opacity:1; }
-    .hero-photo-badge { position:absolute; bottom:-18px; left:-18px; background:var(--orange); color:#fff; padding:16px 22px; border-radius:12px; box-shadow:0 14px 32px rgba(240,120,64,.35); }
-    .hero-photo-badge strong { font-family:'Playfair Display',serif; font-size:1.55rem; display:block; line-height:1; }
-    .hero-photo-badge span { font-size:.6rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
-
     @media(max-width:900px){
-      .hero-grid { grid-template-columns:1fr; text-align:center; }
+      .hero-fade { background:rgba(242,251,255,.9); }
+      .hero-content { max-width:100%; text-align:center; margin:0 auto; }
       .hero-eyebrow { justify-content:center; }
       .hero-pillars { justify-content:center; }
-      .hero p { margin:0 auto 44px; }
+      .hero p { margin:0 auto 40px; }
       .hero-actions { justify-content:center; }
-      .hero-photo { max-width:400px; margin:36px auto 0; }
     }
 
     /* ── AVALIAÇÕES GOOGLE ── */
@@ -405,24 +390,23 @@
 
 <!-- HERO -->
 <section class="hero" id="início">
-  <div class="hero-ripple"></div>
-  <div class="hero-sun">
-    <svg width="360" height="360" viewBox="0 0 360 360" fill="none">
-      <circle cx="180" cy="180" r="90" fill="#3CC8BE"/>
-      <line x1="180" y1="12" x2="180" y2="60" stroke="#3CC8BE" stroke-width="9" stroke-linecap="round"/>
-      <line x1="294" y1="46" x2="261" y2="87" stroke="#3CC8BE" stroke-width="9" stroke-linecap="round"/>
-      <line x1="344" y1="154" x2="296" y2="168" stroke="#3CC8BE" stroke-width="9" stroke-linecap="round"/>
-      <line x1="66" y1="46" x2="99" y2="87" stroke="#3CC8BE" stroke-width="9" stroke-linecap="round"/>
-      <line x1="16" y1="154" x2="64" y2="168" stroke="#3CC8BE" stroke-width="9" stroke-linecap="round"/>
-      <line x1="180" y1="300" x2="180" y2="348" stroke="#3CC8BE" stroke-width="9" stroke-linecap="round"/>
-      <line x1="66" y1="314" x2="99" y2="273" stroke="#3CC8BE" stroke-width="9" stroke-linecap="round"/>
-      <line x1="294" y1="314" x2="261" y2="273" stroke="#3CC8BE" stroke-width="9" stroke-linecap="round"/>
-    </svg>
+  <div class="hero-bg" id="heroSlides">
+    <img class="hero-slide active" src="IMG-web/hero-piscina.jpg" alt="Piscina entregue pela SorriAqua" />
+    <img class="hero-slide" src="IMG-web/IMG_1801.JPG.jpeg" alt="Fachada SorriAqua Piscinas" />
+    <img class="hero-slide" src="IMG-web/IMG_5210.JPG.jpeg" alt="Loja SorriAqua Piscinas" />
+    <img class="hero-slide" src="IMG-web/IMG_1781.JPG.jpeg" alt="Interior da loja SorriAqua" />
   </div>
+  <div class="hero-fade"></div>
   <div class="hero-grid">
     <div class="hero-content">
       <span class="hero-eyebrow">Sorriso, Mato Grosso</span>
-      <h1>Sua piscina, do <em>projeto</em><br/>à manutenção</h1>
+      <h1>
+        <span class="hero-line1">Tudo para</span>
+        <span class="hero-line2">sua piscina</span>
+        <span class="hero-line3">sem complicação!
+          <svg viewBox="0 0 220 12" width="200" height="12" fill="none"><path d="M2 8 Q40 2 80 7 T160 6 T218 4" stroke="#3CC8BE" stroke-width="3" stroke-linecap="round"/></svg>
+        </span>
+      </h1>
       <div class="hero-pillars">
         <span class="hero-pillar">
           <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 16V6l6-4 6 4v10M3 16h12M7 16v-5h4v5"/></svg>
@@ -444,25 +428,13 @@
           Manutenção
         </span>
       </div>
-      <p>Projetos, produtos e assistência técnica reunidos em um só lugar, para sua piscina ficar sempre pronta para o mergulho.</p>
+      <p>Projetos, produtos e assistência técnica reunidos em um só lugar, para sua piscina ficar sempre limpa, segura e perfeita.</p>
       <div class="hero-actions">
         <a href="https://wa.me/5566999209898" target="_blank" class="btn-primary">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
           Solicitar Orçamento
         </a>
-        <a href="#produtos" class="btn-secondary">Ver Produtos Químicos</a>
-      </div>
-    </div>
-    <div class="hero-photo">
-      <div class="hero-photo-frame" id="heroSlides">
-        <img class="hero-slide active" src="IMG-web/hero-piscina.jpg" alt="Piscina entregue pela SorriAqua" />
-        <img class="hero-slide" src="IMG-web/IMG_1801.JPG.jpeg" alt="Fachada SorriAqua Piscinas" />
-        <img class="hero-slide" src="IMG-web/IMG_5210.JPG.jpeg" alt="Loja SorriAqua Piscinas" />
-        <img class="hero-slide" src="IMG-web/IMG_1781.JPG.jpeg" alt="Interior da loja SorriAqua" />
-      </div>
-      <div class="hero-photo-badge">
-        <strong>14+</strong>
-        <span>Anos de experiência</span>
+        <a href="#produtos" class="btn-secondary">Conheça Nossos Produtos</a>
       </div>
     </div>
   </div>
