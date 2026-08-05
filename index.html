@@ -312,7 +312,8 @@
     /* ── MARCAS PARCEIRAS ── */
     .marcas { background:var(--white); }
     .marcas-carousel { position:relative; margin-top:56px; padding:0 52px; }
-    .marcas-grid { display:flex; overflow-x:hidden; scroll-behavior:smooth; border:1px solid var(--border); border-radius:8px; }
+    .marcas-grid { display:flex; overflow-x:auto; scroll-behavior:smooth; scrollbar-width:none; border:1px solid var(--border); border-radius:8px; }
+    .marcas-grid::-webkit-scrollbar { display:none; }
     .marca-item { background:var(--white); display:flex; align-items:center; justify-content:center; padding:28px 20px; height:110px; flex:0 0 170px; border-right:1px solid var(--border); transition:background .3s; }
     .marca-item:last-child { border-right:none; }
     .marca-item:hover { background:var(--bg2); }
