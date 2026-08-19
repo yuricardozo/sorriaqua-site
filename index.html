@@ -1088,7 +1088,7 @@
     const panelsEl = document.getElementById('catalogPanels');
     if (tabsEl && panelsEl) {
       const tabDefs = categories.map(function (c) { return { slug: c.slug, label: c.label }; });
-      const maintTab = { slug: 'manutencao', label: 'Manutenção e Assistência' };
+      const maintTab = { slug: 'manutencao', label: 'Limpeza e Piscineiro' };
       const limpezaIdx = tabDefs.findIndex(function (t) { return t.slug === 'limpeza'; });
       if (limpezaIdx >= 0) tabDefs.splice(limpezaIdx, 0, maintTab); else tabDefs.push(maintTab);
 
