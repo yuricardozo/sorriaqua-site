@@ -296,6 +296,11 @@
     .cart-item-info span { font-size:.76rem; color:var(--muted); }
     .cart-item-remove { background:none; border:none; color:var(--muted); font-size:1.1rem; cursor:pointer; padding:2px 6px; line-height:1; transition:color .2s; }
     .cart-item-remove:hover { color:var(--orange); }
+    .cart-item-side { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+    .cart-qty { display:flex; align-items:center; border:1px solid var(--border); border-radius:4px; overflow:hidden; }
+    .cart-qty button { background:none; border:none; width:26px; height:28px; font-size:1rem; color:var(--teal-dk); cursor:pointer; line-height:1; transition:background .15s; }
+    .cart-qty button:hover { background:var(--teal-lt); }
+    .cart-qty span { min-width:22px; text-align:center; font-size:.82rem; font-weight:700; color:var(--navy); }
     .cart-panel-footer { padding:18px 24px 24px; border-top:1px solid var(--border); }
     .cart-submit { width:100%; display:flex; align-items:center; justify-content:center; gap:9px; background:var(--orange); color:#fff; border:none; border-radius:4px; padding:15px; font-size:.85rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; cursor:pointer; transition:background .2s,transform .2s; }
     .cart-submit:hover { background:var(--orange-lt); transform:translateY(-2px); }
@@ -635,62 +640,15 @@
   </div>
 
   <div class="tabs-wrap">
-    <div class="tabs-nav" role="tablist">
-      <button class="tab-btn active" data-tab="quimicos" role="tab" aria-selected="true">
-        <!-- Sol + frasco -->
-        <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-          <circle cx="10" cy="7" r="3.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
-          <line x1="10" y1="1" x2="10" y2="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="14.2" y1="2.8" x2="13" y2="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="16" y1="7" x2="14" y2="7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="5.8" y1="2.8" x2="7" y2="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="4" y1="7" x2="6" y2="7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          <path d="M7 13v-1.5L6 10h8l-1 1.5V13" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" fill="none"/>
-          <rect x="6" y="13" width="8" height="6" rx="1.2" stroke="currentColor" stroke-width="1.4" fill="none"/>
-        </svg>
-        Produtos Químicos
-      </button>
-      <button class="tab-btn" data-tab="equipamentos" role="tab">
-        <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M9 1v2M9 15v2M1 9h2M15 9h2M3.22 3.22l1.42 1.42M13.36 13.36l1.42 1.42M3.22 14.78l1.42-1.42M13.36 4.64l1.42-1.42" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-        Equipamentos
-      </button>
-      <button class="tab-btn" data-tab="boias" role="tab">
-        <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="9" cy="9" r="3" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
-        Boias e Lazer
-      </button>
-      <button class="tab-btn" data-tab="manutencao" role="tab">
-        <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M12.5 2.5a4 4 0 00-5.4 5.4L2 13v3h3l5.1-5.1a4 4 0 005.4-5.4l-2.6 2.6-2-2 2.6-2.6z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-        Manutenção e Assistência
-      </button>
-      <button class="tab-btn" data-tab="limpeza" role="tab">
-        <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M4 14l8-8M7 4l3 3-5 5-3-3z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 16l2-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-        Limpeza / Piscineiro
-      </button>
+    <div class="tabs-nav" role="tablist" id="catalogTabs">
+      <div class="empty-hint" style="padding:14px 4px">Carregando categorias...</div>
     </div>
   </div>
 
-  <!-- ═══ QUÍMICOS ═══ -->
-  <div class="tab-panel active" data-panel="quimicos">
-    <div class="tab-intro">
-      <p>Linha completa de produtos químicos das marcas <strong>Montreal</strong> e <strong>Genco</strong> para manter o equilíbrio da água, eliminar bactérias e algas e garantir banhos seguros durante todo o ano.</p>
-    </div>
+  <!-- Painéis das categorias: gerados do banco de dados, iguais às abas do painel admin -->
+  <div id="catalogPanels"></div>
 
-    <div class="dynamic-products" data-cat="quimicos"><div class="empty-hint">Carregando catálogo...</div></div>
-  </div><!-- fim quimicos -->
-
-  <!-- ═══ EQUIPAMENTOS ═══ -->
-  <div class="tab-panel" data-panel="equipamentos">
-    <div class="tab-intro"><p>Equipamentos de alta performance para circulação, filtragem e aquecimento da sua piscina.</p></div>
-    <div class="dynamic-products" data-cat="equipamentos"><div class="empty-hint">Carregando...</div></div>
-  </div>
-
-  <!-- ═══ BOIAS ═══ -->
-  <div class="tab-panel" data-panel="boias">
-    <div class="tab-intro"><p>Boias, brinquedos e acessórios para tornar cada momento na piscina mais divertido.</p></div>
-    <div class="dynamic-products" data-cat="boias"><div class="empty-hint">Carregando...</div></div>
-  </div>
-
-  <!-- ═══ MANUTENÇÃO E ASSISTÊNCIA ═══ -->
+  <!-- ═══ MANUTENÇÃO E ASSISTÊNCIA (aba fixa de serviço) ═══ -->
   <div class="tab-panel" data-panel="manutencao">
     <div class="tab-intro"><p>Da revitalização da casa de máquinas ao tratamento periódico da água, nossa equipe técnica cuida da sua piscina depois da obra pronta.</p></div>
     <div class="cat-img-grid">
@@ -709,12 +667,6 @@
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- ═══ LIMPEZA / PISCINEIRO ═══ -->
-  <div class="tab-panel" data-panel="limpeza">
-    <div class="tab-intro"><p>Ferramentas, kits e parceria com piscineiros da região para manter sua piscina impecável com menos esforço e mais resultado.</p></div>
-    <div class="dynamic-products" data-cat="limpeza"><div class="empty-hint">Carregando...</div></div>
   </div>
 
 </section>
@@ -863,22 +815,26 @@
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
 
-  // Tabs
-  document.querySelectorAll('.tab-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var tab = this.dataset.tab;
-      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
-      document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-      this.classList.add('active'); this.setAttribute('aria-selected','true');
-      var panel = document.querySelector('.tab-panel[data-panel="'+tab+'"]');
-      if (panel) panel.classList.add('active');
-    });
+  // Tabs (botões gerados dinamicamente a partir das categorias do banco)
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('.tab-btn');
+    if (btn) activateTab(btn.dataset.tab);
   });
+
+  function activateTab(slug) {
+    document.querySelectorAll('.tab-btn').forEach(function(b) {
+      var on = b.dataset.tab === slug;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    document.querySelectorAll('.tab-panel').forEach(function(p) {
+      p.classList.toggle('active', p.dataset.panel === slug);
+    });
+  }
 
   // Ir para uma aba específica do catálogo (usado pelos cards "O que oferecemos" e links de Parceiros)
   function goToCatalogTab(slug) {
-    var btn = document.querySelector('.tab-btn[data-tab="' + slug + '"]');
-    if (btn) btn.click();
+    activateTab(slug);
     var target = document.getElementById('produtos');
     if (target) target.scrollIntoView({ behavior: 'smooth' });
   }
@@ -922,14 +878,27 @@
     var name = card.dataset.name;
     var brand = card.dataset.brand || '';
     var key = name + '|' + brand + '|' + (size || '');
-    if (!cart.some(function (c) { return c.key === key; })) {
-      cart.push({ key: key, name: name, brand: brand, size: size || null });
-      saveCart();
-      renderCart();
+    var existing = cart.find(function (c) { return c.key === key; });
+    if (existing) {
+      existing.qty = (existing.qty || 1) + 1;
+    } else {
+      cart.push({ key: key, name: name, brand: brand, size: size || null, qty: 1 });
     }
+    saveCart();
+    renderCart();
     el.classList.add('added');
-    var original = el.dataset.originalLabel;
     setTimeout(function () { el.classList.remove('added'); }, 1200);
+  }
+
+  function changeQty(key, delta) {
+    var item = cart.find(function (c) { return c.key === key; });
+    if (!item) return;
+    item.qty = (item.qty || 1) + delta;
+    if (item.qty < 1) {
+      cart = cart.filter(function (c) { return c.key !== key; });
+    }
+    saveCart();
+    renderCart();
   }
 
   function removeFromCart(key) {
@@ -947,9 +916,10 @@
   }
 
   function renderCart() {
+    var totalUnits = cart.reduce(function (s, c) { return s + (c.qty || 1); }, 0);
     var countEl = document.getElementById('cartCount');
-    countEl.textContent = cart.length;
-    countEl.classList.toggle('zero', cart.length === 0);
+    countEl.textContent = totalUnits;
+    countEl.classList.toggle('zero', totalUnits === 0);
 
     var itemsEl = document.getElementById('cartItems');
     var submitBtn = document.getElementById('cartSubmit');
@@ -961,10 +931,17 @@
     }
     itemsEl.innerHTML = cart.map(function (item) {
       var details = [item.brand, item.size].filter(Boolean).join(' · ');
+      var k = item.key.replace(/'/g, "\\'");
       return '<div class="cart-item">' +
         '<div class="cart-item-info"><h5>' + item.name + '</h5>' + (details ? '<span>' + details + '</span>' : '') + '</div>' +
-        '<button class="cart-item-remove" onclick="removeFromCart(\'' + item.key.replace(/'/g, "\\'") + '\')" aria-label="Remover">×</button>' +
-        '</div>';
+        '<div class="cart-item-side">' +
+          '<div class="cart-qty">' +
+            '<button onclick="changeQty(\'' + k + '\',-1)" aria-label="Diminuir quantidade">−</button>' +
+            '<span>' + (item.qty || 1) + '</span>' +
+            '<button onclick="changeQty(\'' + k + '\',1)" aria-label="Aumentar quantidade">+</button>' +
+          '</div>' +
+          '<button class="cart-item-remove" onclick="removeFromCart(\'' + k + '\')" aria-label="Remover">×</button>' +
+        '</div></div>';
     }).join('');
   }
 
@@ -980,7 +957,7 @@
     if (!cart.length) return;
     var lines = cart.map(function (item, i) {
       var details = [item.brand, item.size].filter(Boolean).join(', ');
-      return (i + 1) + '. ' + item.name + (details ? ' (' + details + ')' : '');
+      return (i + 1) + '. ' + (item.qty || 1) + 'x ' + item.name + (details ? ' (' + details + ')' : '');
     });
     var message = 'Olá, SorriAqua! Gostaria de um orçamento para os seguintes produtos:\n\n' + lines.join('\n');
     window.open('https://wa.me/5566999209898?text=' + encodeURIComponent(message), '_blank');
@@ -999,6 +976,30 @@
   const WA_ICON = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>';
 
   function escapeHtml(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  // Ícone de cada aba do catálogo (por slug da categoria; "default" para categorias novas)
+  const TAB_ICONS = {
+    quimicos: '<svg width="16" height="16" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="3.5" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="10" y1="1" x2="10" y2="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="14.2" y1="2.8" x2="13" y2="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="16" y1="7" x2="14" y2="7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="5.8" y1="2.8" x2="7" y2="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4" y1="7" x2="6" y2="7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M7 13v-1.5L6 10h8l-1 1.5V13" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" fill="none"/><rect x="6" y="13" width="8" height="6" rx="1.2" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>',
+    equipamentos: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M9 1v2M9 15v2M1 9h2M15 9h2M3.22 3.22l1.42 1.42M13.36 13.36l1.42 1.42M3.22 14.78l1.42-1.42M13.36 4.64l1.42-1.42" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+    boias: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="9" cy="9" r="3" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>',
+    iluminacao: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M9 1.5a5 5 0 00-3 9c.6.5 1 1.2 1 2h4c0-.8.4-1.5 1-2a5 5 0 00-3-9z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M7 14.5h4M8 17h2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>',
+    protecao: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M9 1.5l6 2.2v4.3c0 3.8-2.4 6.6-6 8.5-3.6-1.9-6-4.7-6-8.5V3.7L9 1.5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>',
+    acessorios: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="5" cy="11" r="3" stroke="currentColor" stroke-width="1.4"/><circle cx="13" cy="11" r="3" stroke="currentColor" stroke-width="1.4"/><path d="M8 11h2M2 11V8a7 7 0 0114 0v3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>',
+    manutencao: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M12.5 2.5a4 4 0 00-5.4 5.4L2 13v3h3l5.1-5.1a4 4 0 005.4-5.4l-2.6 2.6-2-2 2.6-2.6z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>',
+    limpeza: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M4 14l8-8M7 4l3 3-5 5-3-3z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 16l2-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+    default: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M9 2s5 5.2 5 8.6A5 5 0 019 15.5a5 5 0 01-5-4.9C4 7.2 9 2 9 2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>'
+  };
+
+  // Texto de introdução de cada aba (opcional)
+  const TAB_INTROS = {
+    quimicos: 'Linha completa de produtos químicos das marcas <strong>Montreal</strong> e <strong>Genco</strong> para manter o equilíbrio da água, eliminar bactérias e algas e garantir banhos seguros durante todo o ano.',
+    equipamentos: 'Equipamentos de alta performance para circulação, filtragem e aquecimento da sua piscina.',
+    boias: 'Boias, brinquedos e acessórios para tornar cada momento na piscina mais divertido.',
+    iluminacao: 'Iluminação e automação para deixar sua piscina mais moderna, bonita e prática.',
+    protecao: 'Capas e coberturas que garantem mais segurança, menos sujeira e economia na manutenção.',
+    acessorios: 'Óculos, toucas e outros acessórios para completar a experiência na piscina.',
+    limpeza: 'Ferramentas, kits e parceria com piscineiros da região para manter sua piscina impecável com menos esforço e mais resultado.'
+  };
 
   function renderQuimCard(p, variants) {
     const sizesText = variants.map(function (v) { return v.label; }).join(' · ');
@@ -1020,13 +1021,26 @@
       control + '</div></div>';
   }
 
-  function renderCatImgCard(p, categoryLabel) {
-    return '<div class="cat-img-card" data-name="' + escapeHtml(p.name) + '">' +
+  function renderCatImgCard(p, categoryLabel, variants) {
+    variants = variants || [];
+    const sizesText = variants.map(function (v) { return v.label; }).join(' · ');
+    let control;
+    if (variants.length > 1) {
+      control = '<button class="variant-toggle" data-action="toggle">Escolher opção <span class="chev">▾</span></button>' +
+        '<div class="variant-list">' +
+        variants.map(function (v) { return '<button class="variant-chip" data-size="' + escapeHtml(v.label) + '">' + escapeHtml(v.label) + '</button>'; }).join('') +
+        '</div>';
+    } else {
+      const size = variants[0] ? variants[0].label : '';
+      control = '<button class="cat-wa-btn"' + (size ? ' data-size="' + escapeHtml(size) + '"' : '') + '>' + WA_ICON + ' Adicionar ao orçamento</button>';
+    }
+    return '<div class="cat-img-card" data-name="' + escapeHtml(p.name) + '" data-brand="' + escapeHtml(p.brand_name || '') + '">' +
       '<div class="cat-img-wrap"><img src="' + escapeHtml(p.image_url || '') + '" alt="' + escapeHtml(p.name) + '" loading="lazy" />' +
       '<span class="cat-img-tag">' + escapeHtml(categoryLabel) + '</span></div>' +
       '<div class="cat-img-info"><h4>' + escapeHtml(p.name) + '</h4>' +
       (p.description ? '<p>' + escapeHtml(p.description) + '</p>' : '') +
-      '<button class="cat-wa-btn">' + WA_ICON + ' Adicionar ao orçamento</button></div></div>';
+      (sizesText ? '<span class="quim-sizes">' + escapeHtml(sizesText) + '</span>' : '') +
+      control + '</div></div>';
   }
 
   function wireProductEvents(container) {
@@ -1068,6 +1082,30 @@
     });
     products.forEach(function (p) { p.brand_name = p.brand_id && brandById[p.brand_id] ? brandById[p.brand_id].name : ''; });
 
+    // Abas do catálogo: geradas do banco de dados, na mesma ordem do painel admin.
+    // A aba fixa de "Manutenção e Assistência" (serviço, sem produtos) entra antes de Limpeza.
+    const tabsEl = document.getElementById('catalogTabs');
+    const panelsEl = document.getElementById('catalogPanels');
+    if (tabsEl && panelsEl) {
+      const tabDefs = categories.map(function (c) { return { slug: c.slug, label: c.label }; });
+      const maintTab = { slug: 'manutencao', label: 'Manutenção e Assistência' };
+      const limpezaIdx = tabDefs.findIndex(function (t) { return t.slug === 'limpeza'; });
+      if (limpezaIdx >= 0) tabDefs.splice(limpezaIdx, 0, maintTab); else tabDefs.push(maintTab);
+
+      tabsEl.innerHTML = tabDefs.map(function (t) {
+        return '<button class="tab-btn" data-tab="' + escapeHtml(t.slug) + '" role="tab" aria-selected="false">' +
+          (TAB_ICONS[t.slug] || TAB_ICONS.default) + ' ' + escapeHtml(t.label) + '</button>';
+      }).join('');
+
+      panelsEl.innerHTML = categories.map(function (c) {
+        const intro = TAB_INTROS[c.slug] ? '<div class="tab-intro"><p>' + TAB_INTROS[c.slug] + '</p></div>' : '';
+        return '<div class="tab-panel" data-panel="' + escapeHtml(c.slug) + '">' + intro +
+          '<div class="dynamic-products" data-cat="' + escapeHtml(c.slug) + '"><div class="empty-hint">Carregando...</div></div></div>';
+      }).join('');
+
+      if (tabDefs.length) window.activateTab(tabDefs[0].slug);
+    }
+
     // Marcas parceiras
     const marcasGrid = document.getElementById('marcasGrid');
     if (marcasGrid) {
@@ -1108,7 +1146,7 @@
         container.innerHTML = html;
       } else {
         const items = catProducts.sort(function (a, b) { return a.order_index - b.order_index; });
-        container.innerHTML = '<div class="cat-img-grid">' + items.map(function (p) { return renderCatImgCard(p, cat.label); }).join('') + '</div>';
+        container.innerHTML = '<div class="cat-img-grid">' + items.map(function (p) { return renderCatImgCard(p, cat.label, (variantsByProduct[p.id] || []).sort(function (a, b) { return a.order_index - b.order_index; })); }).join('') + '</div>';
       }
       wireProductEvents(container);
     });
